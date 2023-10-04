@@ -1,0 +1,40 @@
+body{
+    text-align: center;
+}
+form{
+  padding: 0;
+  margin: auto;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.false{
+    padding: 0;
+    margin: 0;
+}
+h1{
+    text-transform: uppercase;
+}
+button{
+    color: white;
+    font-size: large;
+    font-weight: 900;
+    background-color: #575656;
+    border: white 2px solid;
+    border-radius: 25%;
+    width: 12.5rem;
+    height: 12.5rem;
+}
+button:hover{
+    color: black;
+    background-color: white;
+    cursor: grab;
+    border: 2px solid black;
+    border-radius: 50%;
+    transition-duration: 250ms;
+}
+.titleBegin{
+    display: block;
+}
