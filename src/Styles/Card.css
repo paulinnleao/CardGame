@@ -3,26 +3,41 @@
     flex-wrap: wrap;
     text-align: center;
     justify-content: space-between;
-    
-}
-.divGame{
-    border: 0;
     padding: 0;
     margin: 0;
+    
+}
+ .divGame{
+    padding: 0;
+    margin: 0;
+    
 }
 .showCard{
     background-color: rgb(224, 224, 224);
-    width: 100px;
-    height: 100px;
 }
 .hideCard{
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
 }
 
-.l2{
-    width: 10px;
-}
 img{
     margin: 5px 0;
+    width: 150px;
+    height: 150px;
+} 
+
+
+.L14 img{
 }
+.L12 img{
+}
+.L10 img{
+}
+.L8 img{
+}
+.L6 img{
+}
+.L4 img{
+}
+/* .L2 img{ */
+/* } .L2 img:first-child{ margin-left: 20rem;} .L2 img:last-child{ margin-right: 0em;} */

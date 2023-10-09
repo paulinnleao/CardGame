@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import Game from './Game';
 
 const defaultValues = {
-    points: 0,
+    points: 1.0,
     level: 0,
     play: false,
+    class: 'L',
 };
 
 const Begin = () => {
@@ -17,7 +18,7 @@ const Begin = () => {
     const choiseLevel = (level, play) => {
         
         setData((previousData) => {
-            return { ...previousData, level: level, play: play }
+            return { ...previousData, level: level, play: play, class: 'L'+level}
         });
     }
     
@@ -39,7 +40,7 @@ const Begin = () => {
             </div>
             }
             {data.play && <Game data={data} setData={setData}/>}
-            <p>Points: 00</p>
+            <p>Points: {data.points}</p>
         </div>
     );
 }
