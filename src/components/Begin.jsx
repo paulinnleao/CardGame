@@ -2,6 +2,7 @@ import { useState } from 'react';
 import '../Styles/Begin.css'
 import { useEffect } from 'react';
 import Game from './Game';
+import Game2 from './Game2';
 
 const defaultValues = {
     points: 1.0,

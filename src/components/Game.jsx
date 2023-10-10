@@ -5,115 +5,94 @@ import '../Styles/Card.css'
 
 import {Images} from "./Images";
 
-
-
 const Game = ({data, setData}) => {
-
-    const [showCardOne, setShowCardOne] = useState([]);
-    const [showCardTwo, setShowCardTwo] = useState([]);
-    const [verifyPairs, setVerifyPairs] = useState([]);
-
     const [pointsGame, setPointsGame] = useState(0);
+    
+    const [verifyCards, setVerifyCards] = useState([]);
+    const [imageToPlay, setImageToPlay] = useState([]);
 
-    const imageToPlay = useMemo(() => {
+    const [refretchPage, setRefretchPage] = useState(false);
+
+    useEffect(() => {
         const arrayEmpty = [];
-
-        for(let i = 0; i<data.level;){
-            let randomImage = Math.floor(Math.random()*Images.length);
+        for(let i = 0; i<data.level*2;){
+            let randomImage = Math.floor(Math.random()*(data.level*2));
             if(!arrayEmpty.includes(randomImage)){
                 arrayEmpty.push(randomImage);
                 i++;
             }
         }
-        return arrayEmpty;
-    }, [data.level]);
+        const imageToPlay2 = [...imageToPlay];
+        arrayEmpty.forEach((i) => {
+            imageToPlay2.push(Images[i]);
+            setImageToPlay(imageToPlay2);
+            setImageToPlay2(imageToPlay2);
+        })
+    },[data.level]);
 
-    const firstCard = (i, cardSelected) => {
-        setShowCardOne((e) => {
-            e[i]=true;
-            return [...e];
-        });
-        setVerifyPairs((...previous)=>[...previous, cardSelected]);
-        console.log("VerifyPairs: " + verifyPairs)
-    };
-    const secondCard = (i) => {
-        setShowCardTwo((e) => {
-            e[i]=true;
-            return [...e];
-        });console.log("Hi 2 + " + verifyPairs);
-        
-    };
-
-
-    useEffect(() => {
-        console.log(verifyPairs[0] + " - " + verifyPairs[1])
-        if(verifyPairs[0]===verifyPairs[1] && (verifyPairs[0]!==null || verifyPairs[0]!==undefined)){
-            setVerifyPairs([]);
-            setPointsGame(pointsGame+100);
+    const verify = () => {
+        console.log(imageToPlay[verifyCards[0]].image+" - " +imageToPlay[verifyCards[1]].image)
+        if(imageToPlay[verifyCards[0]].image===imageToPlay[verifyCards[1]].image){
+            setPointsGame(pointsGame+1);
+            const updateImageToPlay = [...imageToPlay];
+            updateImageToPlay[verifyCards[0]].found=true;
+            updateImageToPlay[verifyCards[1]].found=true;
+            setImageToPlay(updateImageToPlay);
         }else{
-            setVerifyPairs([]);
+            const updateImageToPlay = [...imageToPlay];
+            updateImageToPlay[verifyCards[0]].status=false;
+            updateImageToPlay[verifyCards[1]].status=false;
+            setImageToPlay(updateImageToPlay);
         }
-    },[setVerifyPairs]);
+        setVerifyCards([]);
+    }
+    const resetAll = () => {
+        console.log("Resetando tudo");
+        const resetArray = [...imageToPlay];
+        imageToPlay.forEach =((i) => {
+            resetArray[i].status = false;
+            resetArray[i].found = false;
+            setImageToPlay(resetArray);
+        })
+        setVerifyCards([]);
+        setImageToPlay([])
 
+    }
     useEffect(() => {
-        const arrayEmpty = [];
-        for(let i = 0; i<data.level;i++){
-            arrayEmpty.push(false);
-        }
-        setShowCardOne(arrayEmpty);
-        setShowCardTwo(arrayEmpty);
-        },[setShowCardOne, setShowCardTwo, data.level]);
-    
+    }, [refretchPage, data.level, verifyCards]);
     return (
         <div className="divGame">
             <div className={'divGame_Cards ' + data.class}>
                 {imageToPlay.map((value, i) => (
                     <img 
                      key={i}
-                     src={showCardOne[i] ? Images[value] : './src/ImagesBackground/background.jpg'}
-                     className={showCardOne[i] ? 'showCard' : 'hideCard'}
+                     src={value.status ? '.'+value.image : './src/ImagesBackground/background.jpg'}
+                     className={value.status ? 'showCard' : 'hideCard'}
                      onClick={()=>{
+                        if(verifyCards.length<2 && !value.status){
+                            if(!value.found){
 
-                        if(!showCardOne[i] && (verifyPairs.length <= 1)){
-                            console.log(verifyPairs+" - "+verifyPairs.length)
-                            if(verifyPairs[0] === null || verifyPairs[0] === undefined){
-                                // firstCard(i, Images[value]);
-                                setVerifyPairs((...previous) => [...previous, 1, 2])
-                                setShowCardTwo((e) => {
-                                    e[i]=true;
-                                    return [...e];
-                                });
-                                console.log("ON");
-                            }else if(verifyPairs[1] === null || verifyPairs[1] === undefined){
-                                // secondCard(i, Images[value]);
+                                const updateVerifyCards = [...verifyCards, i];
+                                setVerifyCards(updateVerifyCards);
 
+                                const updatedImageToPlay = [...imageToPlay];
+                                updatedImageToPlay[i].status = true;
+                                setImageToPlay(updatedImageToPlay);
+
+                                setRefretchPage(!refretchPage);
                             }
-                        }else{
-                            setVerifyPairs([]);
-                            console.log("OFF" + verifyPairs.length);
-                            setShowCardTwo((e) => {
-                                e[i]=false;
-                                return [...e];
-                            });
                         }
-
-                    }} />
-                ))}
-                {imageToPlay.map((value, i) => (
-                    <img
-                     key={i}
-                     src={showCardTwo[i] ? Images[value] : './src/ImagesBackground/background.jpg'} 
-                     className={showCardTwo[i] ? 'showCard' : 'hideCard'} 
-                     onClick={()=>{
-                        setShowCardTwo((e) => {
-                            e[i]=true;
-                            return [...e];
-                        })
+                        else{
+                            verify();
+                        }
                     }} />
                 ))}
             </div>
-            <button onClick={
-                () => setData((...previousData) =>({...previousData, play: false}))}>
+            <button 
+            onClick={() => {
+                resetAll();
+                setData((...previousData) =>{return{...previousData, play: false,points:pointsGame}})}
+                }>
                     Exit</button>
         </div>
     );
