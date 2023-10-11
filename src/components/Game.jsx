@@ -5,12 +5,23 @@ import '../Styles/Card.css'
 
 import {Images} from "./Images";
 
+import thisPunch from '../songs/punch.mp3';
+import thisSoda from '../songs/soda.mp3';
+import thisSurprise from '../songs/surprise.mp3';
+
+
+
 const Game = ({data, setData}) => {
+    const [punch] = useState(new Audio(".."+thisPunch));
+    const [soda] = useState(new Audio(".."+thisSoda));
+    const [surprise] = useState(new Audio(".."+thisSurprise));
+    
     const [pointsGame, setPointsGame] = useState(0);
     
     const [verifyCards, setVerifyCards] = useState([]);
     const [imageToPlay, setImageToPlay] = useState([]);
 
+    const [counterLevel, setCounterLevel] = useState(0);
     const [refretchPage, setRefretchPage] = useState(false);
 
     useEffect(() => {
@@ -26,19 +37,20 @@ const Game = ({data, setData}) => {
         arrayEmpty.forEach((i) => {
             imageToPlay2.push(Images[i]);
             setImageToPlay(imageToPlay2);
-            setImageToPlay2(imageToPlay2);
         })
     },[data.level]);
 
     const verify = () => {
-        console.log(imageToPlay[verifyCards[0]].image+" - " +imageToPlay[verifyCards[1]].image)
         if(imageToPlay[verifyCards[0]].image===imageToPlay[verifyCards[1]].image){
-            setPointsGame(pointsGame+1);
+            soda.play();
+            setPointsGame(pointsGame+(data.level/2));
             const updateImageToPlay = [...imageToPlay];
             updateImageToPlay[verifyCards[0]].found=true;
             updateImageToPlay[verifyCards[1]].found=true;
             setImageToPlay(updateImageToPlay);
+            setCounterLevel(counterLevel+1);
         }else{
+            surprise.play();
             const updateImageToPlay = [...imageToPlay];
             updateImageToPlay[verifyCards[0]].status=false;
             updateImageToPlay[verifyCards[1]].status=false;
@@ -47,21 +59,24 @@ const Game = ({data, setData}) => {
         setVerifyCards([]);
     }
     const resetAll = () => {
-        console.log("Resetando tudo");
-        const resetArray = [...imageToPlay];
-        imageToPlay.forEach =((i) => {
-            resetArray[i].status = false;
-            resetArray[i].found = false;
-            setImageToPlay(resetArray);
-        })
+        const resetArray = imageToPlay.map((item)=>{
+            item.status = false;
+            item.found = false;
+            return item;
+        });
         setVerifyCards([]);
-        setImageToPlay([])
+        setImageToPlay(resetArray);
 
     }
     useEffect(() => {
+        if(counterLevel===data.level){
+            resetAll();
+            setData((...previousData) =>{return{...previousData, play: false, points: pointsGame, endGame:true}})
+        }
     }, [refretchPage, data.level, verifyCards]);
     return (
-        <div className="divGame">
+         <div className="divGame">
+            <h1>Accumulated points : <b>{pointsGame}</b> </h1>
             <div className={'divGame_Cards ' + data.class}>
                 {imageToPlay.map((value, i) => (
                     <img 
@@ -71,7 +86,7 @@ const Game = ({data, setData}) => {
                      onClick={()=>{
                         if(verifyCards.length<2 && !value.status){
                             if(!value.found){
-
+                                punch.play();
                                 const updateVerifyCards = [...verifyCards, i];
                                 setVerifyCards(updateVerifyCards);
 
@@ -90,10 +105,16 @@ const Game = ({data, setData}) => {
             </div>
             <button 
             onClick={() => {
-                resetAll();
-                setData((...previousData) =>{return{...previousData, play: false,points:pointsGame}})}
+                var answer = window.confirm("Are you sure? Don't worry, your points will be retained.");
+                if(answer){
+                    resetAll();
+                    setData((...previousData) =>{return{...previousData, play: false, points: pointsGame+data.points}})
+                }
+                    }
                 }>
-                    Exit</button>
+                    Exit
+                </button>
+
         </div>
     );
 

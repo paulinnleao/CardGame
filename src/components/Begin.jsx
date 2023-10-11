@@ -2,13 +2,13 @@ import { useState } from 'react';
 import '../Styles/Begin.css'
 import { useEffect } from 'react';
 import Game from './Game';
-import Game2 from './Game2';
 
 const defaultValues = {
-    points: 1.0,
+    points: 0.0,
     level: 0,
     play: false,
     class: 'L',
+    endGame: false,
 };
 
 const Begin = () => {
@@ -40,7 +40,7 @@ const Begin = () => {
                 </form>
             </div>
             }
-            {data.play && <Game data={data} setData={setData}/>}
+            {!data.endGame && data.play && <Game data={data} setData={setData}/>}
             <p>Points: {data.points}</p>
         </div>
     );
