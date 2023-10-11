@@ -1,8 +1,8 @@
-# React + Vite
+This is a memory game.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+I used this project to practice react, css, js and html.
+There is no way to lose in the game, but it can be implemented.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The game starts when the player choose the level he wants to play.
+The game adds some points when you make a pair correctly.
+When all pairs are found, the player can choose to play again or go back to the beginning.
