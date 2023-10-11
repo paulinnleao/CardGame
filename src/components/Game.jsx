@@ -71,7 +71,11 @@ const Game = ({data, setData}) => {
     useEffect(() => {
         if(counterLevel===data.level){
             resetAll();
-            setData((...previousData) =>{return{...previousData, play: false, points: pointsGame, endGame:true}})
+            const updateDataGame = {...data};
+            updateDataGame.play = false;
+            updateDataGame.points = pointsGame+data.points;
+            updateDataGame.endGame = true;
+            setData(updateDataGame);
         }
     }, [refretchPage, data.level, verifyCards]);
     return (
@@ -108,7 +112,10 @@ const Game = ({data, setData}) => {
                 var answer = window.confirm("Are you sure? Don't worry, your points will be retained.");
                 if(answer){
                     resetAll();
-                    setData((...previousData) =>{return{...previousData, play: false, points: pointsGame+data.points}})
+                    const updateDataGame = {...data};
+                    updateDataGame.play = false;
+                    updateDataGame.points = pointsGame+data.points;
+                    setData(updateDataGame);
                 }
                     }
                 }>

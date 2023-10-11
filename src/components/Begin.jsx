@@ -2,12 +2,13 @@ import { useState } from 'react';
 import '../Styles/Begin.css'
 import { useEffect } from 'react';
 import Game from './Game';
+import EndGame from './EndGame';
 
 const defaultValues = {
     points: 0.0,
     level: 0,
     play: false,
-    class: 'L',
+    class: 'C',
     endGame: false,
 };
 
@@ -19,13 +20,16 @@ const Begin = () => {
     const choiseLevel = (level, play) => {
         
         setData((previousData) => {
-            return { ...previousData, level: level, play: play, class: 'L'+level}
+            return { ...previousData, level: level, play: play, class: 'C'+level}
         });
     }
     
+    useEffect(() => {
+    }, [data])
+
     return (
         <div className="false">
-            {!data.play &&
+            {!data.endGame && !data.play &&
             <div className="divBegin">
                 <h1 className='titleBegin'>Choise your level</h1>
                 <form>
@@ -41,6 +45,7 @@ const Begin = () => {
             </div>
             }
             {!data.endGame && data.play && <Game data={data} setData={setData}/>}
+            {!data.play && data.endGame && <EndGame data={data} setData={setData}/>}
             <p>Points: {data.points}</p>
         </div>
     );
