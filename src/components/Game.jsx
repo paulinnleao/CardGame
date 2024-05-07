@@ -9,6 +9,7 @@ import thisPunch from '../songs/punch.mp3';
 import thisSoda from '../songs/soda.mp3';
 import thisSurprise from '../songs/surprise.mp3';
 
+import BackgroundImageCard from '../ImagesBackground/background.jpg'
 
 
 const Game = ({data, setData}) => {
@@ -85,9 +86,10 @@ const Game = ({data, setData}) => {
                 {imageToPlay.map((value, i) => (
                     <img 
                      key={i}
-                     src={value.status ? '.'+value.image : './src/ImagesBackground/background.jpg'}
+                     src={value.status ? '.'+value.image : BackgroundImageCard}
                      className={value.status ? 'showCard' : 'hideCard'}
                      onClick={()=>{
+                        console.log(value.image)
                         if(verifyCards.length<2 && !value.status){
                             if(!value.found){
                                 punch.play();
